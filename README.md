@@ -12,7 +12,7 @@ I commenti analizzati sono relativi a dieci video (cinque per canale) su cinque 
 - **RQ1.** Quali sono le differenze e le analogie tra i bisogni informativi dei pubblici di una testata nativa di piattaforma e di una testata tradizionale?
 - **RQ2.** Quali sono i bisogni informativi maggiormente condivisi dagli stessi utenti?
 
-## Competenze Tecniche
+## Competenze
 
 - **Linguaggio e Stack:** R (tidyverse, dplyr, ggplot2, tidyr).
 - **Raccolta Dati:** `tuber` per l'interfacciamento con la YouTube Data API v3; autenticazione OAuth e download massivo dei commenti con selezione delle colonne rilevanti.
