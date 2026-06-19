@@ -40,6 +40,7 @@ I commenti analizzati sono relativi a dieci video (cinque per canale) su cinque 
 - **Performance della codifica automatica:** Le classi più performanti nella classificazione di ChatGPT sono *Give me perspective*, *Divert me* ed *Educate me*; le più problematiche *Help me* e *Keep me on trend*.
 
 ## Ringraziamenti
+
 Ringrazio il professor Christopher Cepernich, relatore della tesi, e il professor Antonio Martella per il supporto metodologico e tecnico nello sviluppo del codice.
 ---
 
