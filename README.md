@@ -39,9 +39,8 @@ I commenti analizzati sono relativi a dieci video (cinque per canale) su cinque 
 - **Engagement:** I commenti associati a *Help me* registrano la media di like più alta (12,5), nonostante rappresentino una delle categorie meno frequenti — segnale che le richieste pratiche rivolte alla community ottengono un alto riconoscimento tra gli utenti.
 - **Performance della codifica automatica:** Le classi più performanti nella classificazione di ChatGPT sono *Give me perspective*, *Divert me* ed *Educate me*; le più problematiche *Help me* e *Keep me on trend*.
 
-## Ringraziamenti
-
 Ringrazio il professor Christopher Cepernich, relatore della tesi, e il professor Antonio Martella per il supporto metodologico e tecnico nello sviluppo del codice.
+
 ---
 
 *Altri progetti di analisi dei dati:*
