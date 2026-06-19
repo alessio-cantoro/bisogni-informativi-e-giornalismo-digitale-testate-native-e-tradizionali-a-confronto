@@ -1,5 +1,4 @@
-# Bisogni informativi su YouTube: Breaking Italy vs La Repubblica
-
+# Bisogni informativi e giornalismo digitale: testate native e tradizionali a confronto.
 Analisi dei commenti YouTube per la classificazione dei bisogni informativi degli utenti, sviluppata come progetto empirico della tesi di laurea magistrale in Comunicazione, ICT e media (LM-59) all'Università degli Studi di Torino.
 
 ## Descrizione
