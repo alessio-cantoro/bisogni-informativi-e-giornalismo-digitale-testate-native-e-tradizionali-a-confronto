@@ -1,58 +1,48 @@
 # Bisogni informativi su YouTube: Breaking Italy vs La Repubblica
 
-Questo repository contiene il codice R sviluppato per la tesi di laurea magistrale in **Comunicazione, ICT e Media** (LM-59) presso l'Università degli Studi di Torino.
+Analisi dei commenti YouTube per la classificazione dei bisogni informativi degli utenti, sviluppata come progetto empirico della tesi di laurea magistrale in Comunicazione, ICT e media (LM-59) all'Università degli Studi di Torino.
 
 ## Descrizione
 
-La ricerca analizza i bisogni informativi degli utenti che commentano i video di due canali YouTube: **Breaking Italy**, testata nativa di piattaforma, e **La Repubblica** (playlist *Recap*), testata tradizionale o *legacy media*. Per classificare i commenti si è adottato il modello degli **User Needs** di Dmitry Shishkin e SmartOcto (2021), che prevede otto categorie corrispondenti ad altrettanti bisogni informativi: *Update me*, *Keep me on trend*, *Educate me*, *Give me perspective*, *Divert me*, *Inspire me*, *Connect me*, *Help me*.
+Lo studio indaga i bisogni informativi degli utenti che commentano i video di due canali YouTube: **Breaking Italy**, testata nativa di piattaforma, e **La Repubblica** (playlist *Recap*), testata tradizionale o *legacy media*. Per classificare i 1933 commenti raccolti è stato adottato il modello degli **User Needs** di Dmitry Shishkin e SmartOcto (2021), che prevede otto categorie corrispondenti ad altrettanti bisogni informativi: *Update me*, *Keep me on trend*, *Educate me*, *Give me perspective*, *Divert me*, *Inspire me*, *Connect me*, *Help me*.
 
-Sono stati raccolti e analizzati **1933 commenti** relativi a dieci video (cinque per canale), su cinque argomenti comuni: caduta di Assad in Siria, caso Paragon, trattative USA/Russia per l'Ucraina, elezioni in Germania, dazi commerciali USA.
+I commenti analizzati sono relativi a dieci video (cinque per canale) su cinque argomenti comuni: caduta di Assad in Siria, caso Paragon, trattative USA/Russia per l'Ucraina, elezioni in Germania, dazi commerciali USA.
 
-## Struttura del file
+## Domande di Ricerca
 
-Lo script `analisi_userneed_youtube.R` è organizzato in sei sezioni sequenziali:
+- **RQ1.** Quali sono le differenze e le analogie tra i bisogni informativi dei pubblici di una testata nativa di piattaforma e di una testata tradizionale?
+- **RQ2.** Quali sono i bisogni informativi maggiormente condivisi dagli stessi utenti?
 
-| Sezione | Contenuto |
-|---------|-----------|
-| 1 | Installazione e caricamento dei pacchetti |
-| 2 | Raccolta dei commenti via YouTube API (pacchetto `tuber`) |
-| 3 | Preparazione e unione del dataset (dopo classificazione con ChatGPT) |
-| 4 | Analisi delle frequenze degli user need per puntata e per autore |
-| 5 | Validazione della codifica: Krippendorff's alpha e matrice di confusione |
-| 6 | Analisi dell'engagement: statistiche descrittive dei like per user need |
+## Competenze Tecniche
 
-> **Nota sul flusso di lavoro:** tra la sezione 2 e la sezione 3 è presente una fase esterna a R: i file `.xlsx` esportati sono stati aperti e la colonna `userNeed` è stata aggiunta tramite ChatGPT, che ha associato ciascun commento a uno degli otto bisogni informativi.
+- **Linguaggio e Stack:** R (tidyverse, dplyr, ggplot2, tidyr).
+- **Raccolta Dati:** `tuber` per l'interfacciamento con la YouTube Data API v3; autenticazione OAuth e download massivo dei commenti con selezione delle colonne rilevanti.
+- **Classificazione Assistita da IA:** Integrazione di ChatGPT come strumento di codifica automatica, con prompt strutturati per l'associazione di ogni commento a uno degli otto user need del modello.
+- **Validazione della Codifica:** Calcolo del **Krippendorff's alpha** (`irr`) su un campione di 321 commenti riclassificati manualmente; analisi della matrice di confusione e calcolo di precision, recall, F1-score e balanced accuracy per classe (`caret`).
+- **Analisi dell'Engagement:** Statistiche descrittive (media, mediana, quartili, minimo, massimo) del numero di like per ciascuna categoria di user need, disaggregate per autore e per puntata (`tidyverse`).
+- **Visualizzazione:** Heatmap della matrice di confusione (frequenze assolute, percentuali sul totale e normalizzate per classe) e grafici a barre delle metriche di performance (`ggplot2`).
+- **Export:** Esportazione automatizzata dei dataset e dei risultati in formato Excel e CSV (`writexl`, `readxl`, `readr`).
 
-## Tecnologie e pacchetti utilizzati
+## Flusso di Lavoro dell'Analisi
 
-- **R** / RStudio
-- [`tuber`](https://cran.r-project.org/package=tuber) — raccolta commenti via YouTube Data API v3
-- [`tidyverse`](https://www.tidyverse.org/) — manipolazione e visualizzazione dei dati
-- [`irr`](https://cran.r-project.org/package=irr) — calcolo del Krippendorff's alpha
-- [`caret`](https://cran.r-project.org/package=caret) — matrice di confusione e metriche di performance
-- [`writexl`](https://cran.r-project.org/package=writexl) / [`readxl`](https://cran.r-project.org/package=readxl) — import/export file Excel
+1. **Raccolta dati (YouTube API):** Autenticazione OAuth tramite credenziali salvate in variabili d'ambiente (`.Renviron`); download dei commenti relativi ai dieci video target con il pacchetto `tuber`; selezione delle colonne utili (`id`, `textOriginal`, `likeCount`, `publishedAt`) ed esportazione in xlsx.
+2. **Classificazione con ChatGPT (fase esterna):** Apertura dei file xlsx e aggiunta della colonna `userNeed` tramite ChatGPT, istruito a classificare ogni commento in base ai bisogni informativi del modello User Needs in base al bisogno che ha spinto l'utente a scriverlo.
+3. **Preparazione e unione del dataset:** Re-importazione dei file classificati, aggiunta delle colonne `autore` e `puntata`, conversione di `likeCount` in numerico, unione in un unico dataframe con `bind_rows()` (colonna `.id = "origine"`) ed estrazione di un campione casuale stratificato (`set.seed(42)`, n = 321) per la validazione.
+4. **Analisi delle frequenze:** Correzione di etichette non uniformi; tabelle di distribuzione degli user need per puntata e per autore con `pivot_wider()`, esportate in CSV.
+5. **Validazione della codifica:** Confronto tra le etichette manuali e quelle assegnate da ChatGPT sul campione di 321 commenti con Krippendorff's alpha (metodo nominale); visualizzazione delle discrepanze con tre versioni della matrice di confusione (valori assoluti, percentuali sul totale, percentuali normalizzate per classe); calcolo di precision, recall, F1 e balanced accuracy per ciascuna categoria.
+6. **Analisi dell'engagement:** Calcolo delle statistiche descrittive dei like per user need in tre livelli di disaggregazione — generale, per autore e per puntata — ed esportazione delle tabelle risultanti in xlsx.
 
-## Configurazione
+## Principali Risultati
 
-Le credenziali per l'accesso alla YouTube Data API v3 non sono incluse nel codice. Per replicare la raccolta dati:
+- **User need dominante:** *Give me perspective* è la categoria associata al maggior numero di commenti in nove video su dieci, per entrambi i canali, a conferma che gli utenti cercano contenuti che aiutino a formare un'opinione su argomenti complessi.
+- **Analogie tra i canali:** L'ordine dei quattro user need più frequenti è identico per Breaking Italy e La Repubblica: *Give me perspective*, *Divert me*, *Connect me*, *Educate me*.
+- **Differenze tra i pubblici:** *Give me perspective* supera il 50% dei commenti de La Repubblica (vs. ~39% di Breaking Italy); *Connect me* vale il 17% per Breaking Italy contro l'9% de La Repubblica, riflettendo la community affermata costruita attorno al canale dal 2011.
+- **Engagement:** I commenti associati a *Help me* registrano la media di like più alta (12,5), nonostante rappresentino una delle categorie meno frequenti — segnale che le richieste pratiche rivolte alla community ottengono un alto riconoscimento tra gli utenti.
+- **Performance della codifica automatica:** Le classi più performanti nella classificazione di ChatGPT sono *Give me perspective*, *Divert me* ed *Educate me*; le più problematiche *Help me* e *Keep me on trend*.
 
-1. Creare un progetto nella [Google Cloud Console](https://console.cloud.google.com/) e abilitare la YouTube Data API v3.
-2. Aggiungere le credenziali al file `~/.Renviron`:
-```
-YT_CLIENT_ID=<tuo_client_id>
-YT_CLIENT_SECRET=<tuo_client_secret>
-```
-3. Riavviare R. Lo script legge le variabili con `Sys.getenv()`.
-
-Aggiungere `.httr-oauth` al `.gitignore` per evitare di esporre il token di autenticazione.
-
-## Riferimenti
-
-- Shishkin, D., Tran, M., Loumeau, J., Murray, J. (2021). *User Needs Model 2.0*. SmartOcto & BBC.
-- Ten Teije, S., Woudstra, A. (2023). *User Needs 2.0*. SmartOcto.
-
+Ringrazio il professor Christopher Cepernich, relatore della tesi, e il professor Antonio Martella per il supporto metodologico e tecnico nello sviluppo del codice.
 ---
 
 *Altri progetti di analisi dei dati:*
-- [Analisi esplorativa del dataset Palmer Penguins](https://github.com/alessio-cantoro/penguins-analysis-project)
-- [I giornalisti italiani al Breaking Italy Night](https://github.com/alessio-cantoro/I-giornalisti-italiani-al-Breaking-Italy-Night)
+- [Analisi Statistica e Predittiva sul Palmer Penguins Dataset](https://github.com/alessio-cantoro/penguins-analysis-project)
+- [I giornalisti italiani al "Breaking Italy Night"](https://github.com/alessio-cantoro/I-giornalisti-italiani-al-Breaking-Italy-Night)
